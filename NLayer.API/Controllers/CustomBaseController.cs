@@ -4,6 +4,8 @@ using NLayer.Core.DTOs;
 
 namespace NLayer.API.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class CustomBaseController : ControllerBase
     {
         //Endpoint olmadigini Swagger'a bildirmek icin NonAction Attribute kullanilir.
