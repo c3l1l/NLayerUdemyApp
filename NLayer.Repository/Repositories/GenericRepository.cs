@@ -1,15 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NLayer.Core.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NLayer.Repository.Repositories
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T:class
+    public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         protected readonly AppDbContext _context;
         private readonly DbSet<T> _dbSet;
@@ -38,10 +33,10 @@ namespace NLayer.Repository.Repositories
         public IQueryable<T> GetAll()
         {
             // cekilen datanin memory'de tutulmamasi ve takip edilmemesi icin performans acisindan AsNoTracking kullanilir.
-          return _dbSet.AsNoTracking().AsQueryable();
+            return _dbSet.AsNoTracking().AsQueryable();
         }
 
-        public async  Task<T> GetByIdAsync(int id)
+        public async Task<T> GetByIdAsync(int id)
         {
             return await _dbSet.FindAsync(id);
         }
@@ -49,13 +44,13 @@ namespace NLayer.Repository.Repositories
         public void Remove(T entity)
         {
             // memory'deki entity'nin state durumunu deleted olarak degistirilir ve o yuzden ASYNc kullanilmaz. gerek yok.
-           // _context.Entry(entity).State = EntityState.Deleted;
+            // _context.Entry(entity).State = EntityState.Deleted;
             _dbSet.Remove(entity);
         }
 
         public void RemoveRange(IEnumerable<T> entities)
         {
-            _dbSet.RemoveRange(entities);  
+            _dbSet.RemoveRange(entities);
         }
 
         public void Update(T entity)
