@@ -34,5 +34,35 @@ namespace NLayer.Repository
             
             base.OnModelCreating(modelBuilder);
         }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            foreach (var item in ChangeTracker.Entries())
+            {
+                if (item.Entity is BaseEntity entityReference)
+                {
+                    switch (item.State)
+                    {
+                        case EntityState.Added:
+                            {
+                                Entry(entityReference).Property(x => x.UpdateDate).IsModified = false;
+                                entityReference.CreatedDate = DateTime.Now;
+                                break;
+                            }
+                        case EntityState.Modified:
+                            {
+                                Entry(entityReference).Property(x => x.CreatedDate).IsModified = false;
+                                entityReference.UpdateDate = DateTime.Now;
+                                break;
+                            }
+                    }
+                }
+            }
+
+
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
     }
+
 }
